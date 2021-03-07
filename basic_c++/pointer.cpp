@@ -1,5 +1,17 @@
 #include <iostream>
 
+template <typename T>
+void printPointer(T ptr) {
+	std::cout << "Type: " << typeid(T).name() << std::endl;
+	std::cout << "Pointer: " << *ptr << "\tAddress: " << &ptr << "\tVariable: " << ptr << "\n\n";
+}
+
+void basicPointer() {
+	int x = 5;
+	int* y = &x; //Pointer to address
+	printPointer(y);
+}
+
 void squareByPtr(int* numPtr) {
 	*numPtr *= *numPtr;
 }
@@ -10,7 +22,9 @@ void constPointer() {
 	const int* ptr1 = &x;
 	int* const ptr2 = &y;
 	const int* const ptr3 = &x;
-	std::cout << *ptr1 << *ptr2 << *ptr3 << std::endl;
+	printPointer(ptr1);
+	printPointer(ptr2);
+	printPointer(ptr3);
 }
 
 void pointArithemtic() {
@@ -18,18 +32,24 @@ void pointArithemtic() {
 	int* ptr = arr;
 	ptr++;
 	int* ptr2 = (arr + 2);
-	std::cout << "ptr++: " << *ptr << " ptr2(arr+2): " <<  *ptr2 << std::endl;
+	std::cout << "Pointer++: " << *ptr << "\tPointer 2(arr+2): " << *ptr2 << std::endl;
+}
+
+void doublePointer() {
+	int a = 3;
+	int* b  = &a;
+	int** c = &b;
+	
+	printPointer(&c);
+	printPointer(c);
+	printPointer(*c);
 }
 
 int main() {
 	int y = 6;
 	int* x = &y;
 
-	std::cout << "x: " << x << " *x: " << *x << " &x: " << &x << std::endl;
-	squareByPtr(x);
-	std::cout << "x: " << x << " *x: " << *x << " &x: " << &x << std::endl;
 	constPointer();
-	pointArithemtic();
 
 	return 0;	
 }
