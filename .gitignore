@@ -660,6 +660,8 @@ StyleCopReport.xml
 *.scc
 *.vcxproj
 *.filters
+*.config
+*.sln
 
 # Chutzpah Test files
 _Chutzpah*
