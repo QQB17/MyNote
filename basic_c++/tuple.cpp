@@ -1,7 +1,7 @@
 #include <iostream>
 #include <tuple>
 
-// g++ tuple.cpp -o tuple -std=c++1z
+// g++ tuple.cpp -std=c++1z
 
 template <typename T>
 int sizeTuple(T tup) {
@@ -74,6 +74,11 @@ auto concatenateTuple(T tup1, T tup2) {
 	return tup3;
 }
 
+// return mutiple value by tuple
+std::tuple<int, int> returnMutipleValue(int val) {
+	return std::make_tuple(val * 5, val * 10);
+}
+
 int main() {
 	std::tuple <int, char, double> tup1;
 	std::tuple<int, char, double> tup2(9, 'w', 2.111);
@@ -84,6 +89,10 @@ int main() {
 	swapTuple(tup2, tup3);
 	tieTuple(tup3);
 	concatenateTuple(tup2, tup3);
+	 
+	int val_x, val_y;
+	std::tie(val_x, val_y) = returnMutipleValue(5);
+	std::cout << "Return mutiple value by tuple: " << val_x << " " << val_y << '\n';
 
 	return 0;
 }
