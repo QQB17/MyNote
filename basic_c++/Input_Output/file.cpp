@@ -21,7 +21,7 @@ void inputValueToFile() {
 	while (true) {
 		n.clear();
 		std::getline(std::cin, n);
-		if (n == "exit") break;
+		if (n == "exit") break; 
 		file << n << std::endl;
 	}
 	std::cout << "File Closing...\n";

@@ -1,10 +1,12 @@
+#include <ios>
+#include <iosfwd>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 
 // Warning: Make sure to set back to default setting after manipulator the output
 
-class basic_ios {
+class manipulator_ios {
 public:
 	void set_boolalpha() {
 		bool num = 1;
@@ -20,7 +22,7 @@ public:
 	}
 
 	void set_floatfield() {
-		float pi = 3.14159;
+		double pi = 3.14159;
 		std::cout << "Hex Float: " << std::hexfloat << pi // break when float point is more than 5
 			<< "\t\tDefault Float: " << std::defaultfloat << pi << '\n';
 	} 
@@ -81,19 +83,70 @@ public:
 	}
 };
 
+class Basic_ios {
+private:
+	std::stringstream ss;
+	std::ofstream file;
+	// ss.clear() -- set new value for stream
+	//
+public:
+
+	void copy_format() {
+		std::ofstream file("test.txt");
+		std::cout.fill('#');
+		std::cout.width(5);
+		file.copyfmt(std::cout);
+		std::cout << 40 << std::endl;
+		file << 40; // ###40
+		file.close();
+	}
+
+	void exception() {
+		std::ifstream file;
+		try {
+			file.open("test.txt");
+			file.exceptions(std::ifstream::failbit);
+			std::string str;
+			file >> str;
+			std::cout << "Get file without execption: " << str << std::endl;
+		}
+		catch (std::ifstream::failure e) {
+			std::cerr << "Exception opening/reading file: " << e.what() << '\n';
+		}
+		file.close();
+	}
+
+
+	void print_state(const std::ios& ss) {
+		
+		std::cout << "\tgood(): " << ss.good()
+			<< "\teof(): " << ss.eof()
+			<< "\tfail(): " << ss.fail()
+			<< "\tbad(): " << ss.bad() << std::endl;
+	}
+
+	void check_stream_state() {
+		ss.clear(ss.goodbit);
+		std::cout << "Good bit: ";
+		print_state(ss);
+		ss.clear(ss.eofbit);
+		std::cout << "Error bit: ";
+		print_state(ss);
+		ss.clear(ss.failbit);
+		std::cout << "Failed bit: ";
+		print_state(ss);
+		ss.clear(ss.badbit); 
+		std::cout << "Bad bid: "; 
+		print_state(ss); 
+	}
+
+
+};
+
 int main() {
-	basic_ios ios;
-	ios.set_boolalpha();
-	ios.set_basefield();
-	ios.set_floatfield();
-	ios.set_fixed_float_point();
-	ios.show_base();
-	ios.show_decimal_point();
-	ios.show_positive();
-	ios.not_skip_whitespace();
-	ios.unitbuf();
-	ios.show_uppercase();
-
-
+	Basic_ios basic;
+	basic.copy_format();
+	basic.exception();
+	basic.check_stream_state();
 	return 0;
 }
