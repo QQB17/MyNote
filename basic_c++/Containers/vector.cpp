@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <functional>
 
 // 1. Vector is to store element in sequential location.
 // 2. Efficient with resize, access element.
@@ -11,15 +10,16 @@
 // 2. vector<Type> *vec = new vector<Type>; // allocate on the heap
 // 3 .vector<Type*> vec; // allocate vector on the stack, and a bunch of pointers on the heap
 
+// Construct vector -- C++11
+std::vector<int> vec1;								// default
+std::vector<int> vec2(2,100);						// fill size and value
+std::vector<int> vec3(vec2.begin(), vec2.end());	// iterating from vec2
+std::vector<int> vec4{ 11,22,33,44 };				// fill value
+std::vector<int> vec5(vec4);						// copy
+std::vector<int> vec6(std::move(vec5));				// move, now vec5 is NULL but still alive
+
 class VectorMemberFunction {
-private:
-
 public:
-	std::vector<int> vec1; // default
-	std::vector<int> vec2;
-	std::vector<int> vec3;
-	std::vector<int> vec4{ 11,22,33,44 };
-
 	template <typename T>
 	void v_print(std::vector<T>& vec) {
 		int x = 0, n = vec.size();
@@ -27,7 +27,6 @@ public:
 		for (auto& a : vec)
 			std::cout << "[" << x++ << "]\t" << a << '\n';
 		std::cout << std::endl;
-
 	}
 	
 	// Assign size and value
@@ -91,7 +90,6 @@ public:
 		vec4.clear();
 		v_print(vec4);
 	}
-
 
 	// direct pointer to the array
 	void v_data() {
@@ -186,7 +184,8 @@ int main() {
 	VectorMemberFunction func;
 	VectorType vt;
 
-	func.v_print(func.vec4);
+	func.v_print(vec5);
+	func.v_print(vec6);
 
 	vt.v_vector_vector(vt.v_double);
 
