@@ -21,10 +21,11 @@ public:
 	std::vector<int> vec4{ 11,22,33,44 };
 
 	template <typename T>
-	void v_print(std::vector<T> vec) {
-		std::cout << "Vec size: " << vec.size() << '\n';
+	void v_print(std::vector<T>& vec) {
+		int x = 0, n = vec.size();
+		v_capacity(vec);
 		for (auto& a : vec)
-			std::cout << a << '\n';
+			std::cout << "[" << x++ << "]\t" << a << '\n';
 		std::cout << std::endl;
 
 	}
@@ -78,10 +79,10 @@ public:
 	}
 
 	// Currently allocated storage capacity, it can be bigger than current size
-	void v_capacity() {
-		for (int i = 0;i < 1000;i++) vec1.push_back(i);
-		std::cout << "Current Vector size: " << vec1.size() << std::endl;
-		std::cout << "Current Vector capacity: " << (int)vec1.capacity() << std::endl;
+	template <typename T>
+	void v_capacity(std::vector<T>& vec) {
+		std::cout << "Current Vector size: " << vec.size() << std::endl;
+		std::cout << "Current Vector capacity: " << vec.capacity() << std::endl;
 	}
 
 	// Remove all elements
@@ -124,7 +125,6 @@ public:
 		v_print(vec4);
 	}
 
-
 	// insert new element at the end of the vector
 	// create a temporary object to storage the data, then copy or move the object to the vector
 	void v_push_back() {
@@ -132,11 +132,63 @@ public:
 		vec4.push_back(10);
 		v_print(vec4);
 	}
+
+	// Change the vector size and intialize the value
+	void v_resize() {
+		vec4.resize(20);
+		v_print(vec4);
+	}
+
+	// Only allocated memory and increase the capacity
+	void v_reserve() {
+		vec4.reserve(30);
+		v_print(vec4);
+	}
+
+
+	// Shrink the capacity to actual size
+	void v_shrink_to_fit() {
+		v_reserve();
+		vec4.shrink_to_fit();
+		v_print(vec4);
+	}
+};
+
+class VectorType : public VectorMemberFunction {
+public:
+	std::vector<std::pair<int, int>> v_pair{ {1,2},{3,4},{5,6} };
+	std::vector<std::vector<char>> v_char{ {'h','e','l','l','o'},{'w','o','r','l','d'} };
+	std::vector<std::vector<double>> v_double{ {3.142,5.16},{7.66,4.22},{1.11,3.33} }; 
+
+	void v_vector_pair() {
+		for (auto& v : v_pair) 
+			std::cout << v.first <<' ' << v.second << '\n';
+	}
+
+	template <typename T>
+	void v_vector_vector(std::vector<std::vector<T>> vec) {
+		int n = vec.size();  // Size of row
+		int m = vec[0].size(); // Size of column
+		v_capacity(vec);
+		v_capacity(vec[0]);
+
+		std::cout << "Print double vector elements: " << std::endl;
+		for (int i = 0; i < n;i++) {
+			std::cout << "[" << i << "]\t";
+			for (int j = 0; j < m;j++) 
+				std::cout << vec[i][j] << ' ';
+			std::cout << '\n';
+		}
+	}
 };
 
 int main() {
-	VectorMemberFunction v;
-	v.v_push_back();
+	VectorMemberFunction func;
+	VectorType vt;
+
+	func.v_print(func.vec4);
+
+	vt.v_vector_vector(vt.v_double);
 
 	return 0;
 }
