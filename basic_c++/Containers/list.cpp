@@ -3,6 +3,7 @@
 
 // List are sequence container 
 // Constant time to insert and erase element
+// Pointing back & next element
 // Can't direct access pointer position, need iterator to access from a known position
 // It will use extra memory to keep linking information associated to each elements
 
