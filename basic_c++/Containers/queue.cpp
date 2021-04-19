@@ -9,7 +9,7 @@
 // Use "push" to insert element, use "front" to access element
 
 // Construct Container
-std::vector<int> vec_1(2, 1);
+std::vector<int> vec_1{ 4,5,6,7,8 };
 std::list<int> list_1(3, 2);
 std::deque<int> deque_1(4, 3);
 
@@ -29,7 +29,7 @@ std::vector<int> vec_2{ 5,2,3,8,1,10 };
 
 // Construct Priority Queue -- C++ 11
 std::priority_queue<int> p_queue_1; // default
-std::priority_queue<int> p_queue_2(3, 5); // size and value
+std::priority_queue<int> p_queue_2(3, 100); // size and increment starting value by size
 std::priority_queue<int> p_queue_3(vec_2.begin(), vec_2.end()); // copy iteration
 std::priority_queue<int> p_queue_4(std::move(p_queue_3)); // move
 // default container is "vector", default comparsion is "less", insert intialize list
@@ -40,57 +40,48 @@ std::priority_queue<int, std::deque<int>,std::greater<int>> p_queue_6(vec_2.begi
 class QueueMemberFunction {
 public:
 
-	template <typename T>
-	void q_print(std::queue<T>& m_queue) {
-		int n = m_queue.size();
-		std::cout << "Queue size: " << n << std::endl;
-		std::cout << "Start of the Queue\n";
-		for (int i = 0;i < n;i++) {
-			std::cout << "[" << i << "]\t" << m_queue.front() << '\n';
-			m_queue.pop();
-		}
-		std::cout << "End of the Queue\n";
-	}
-
 	template <typename T, typename Container>
 	void q_print(std::queue<T, Container>& m_queue) {
+		if (m_queue.empty()) return;
 		int n = m_queue.size();
 		std::cout << "Queue size: " << n << std::endl;
-		std::cout << "Start of the Queue\n";
-		for (int i = 0;i < n;i++) {
-			std::cout << "[" << i << "]\t" << m_queue.front() << '\n';
-			m_queue.pop();
-		}
-		std::cout << "End of the Queue\n";
+
+		// get the first index and iterate it
+		auto it = m_queue.front();
+		for (int i = 0; i < n;i++) 
+			std::cout << "[" << i << "]\t" << it++ << '\n';
 	}
 
 	// Insert element to the end
-	void q_push() {
-		int x = 99;
-		queue_1.push(x);
-		queue_1.push(10);
+	template <typename T, typename Container>
+	void q_push(std::queue<T, Container>& m_queue, const T& value) {
+		m_queue.push(value);
 	}
 
 	// Construct and insert element to the end
-	void q_emplace() {
-		queue_1.emplace(50);
+	template <typename T, typename Container>
+	void q_emplace(std::queue<T, Container>& m_queue, const T& value) {
+		m_queue.emplace(value);
 	}
 
 	// remove first element
-	void q_pop() {
-		queue_1.pop();
+	template <typename T, typename Container>
+	void q_pop(std::queue<T, Container>& m_queue) {
+		//m_queue.pop();
 	}
 
-	void q_front() {
-		std::cout << "First element of Queue[0]: " << queue_1.front() << std::endl;
+	template <typename T, typename Container>
+	void q_front(std::queue<T, Container>& m_queue) {
+		//std::cout << "First element of Queue[0]: " << m_queue.front() << std::endl;
 	}
-	
-	void q_back() {
-		std::cout << "Last element of Queue[" << queue_1.size() - 1 << "]: " << queue_1.back() << std::endl;
+	template <typename T, typename Container>
+	void q_back(std::queue<T, Container>& m_queue) {
+		//std::cout << "Last element of Queue[" << m_queue.size() - 1 << "]: " << m_queue.back() << std::endl;
 	}
 
-	bool q_empty() {
-		if (queue_1.empty()) {
+	template <typename T, typename Container>
+	bool q_empty(std::queue<T, Container>& m_queue) {
+		if (m_queue.empty()) {
 			std::cout << "Queue is empty.\n";
 			return true;
 		}
@@ -100,96 +91,94 @@ public:
 		}
 	}
 
-	void q_swap() {
-		queue_1.swap(queue_5);
+	template <typename T, typename Container>
+	void q_swap(std::queue<T, Container>& m_queue1, std::queue<T, Container>& m_queue2) {
+		m_queue1.swap(m_queue2);
 	}
+
 };
 
 class PriorityQueueMemberFunction {
 public:
-
-	template <typename T>
-	void pq_print(std::priority_queue<T>& m_priority) {
-		int n = m_priority.size();
-		std::cout << "Priority Queue size: " << n << std::endl;
-		for (int i = 0;i < n;i++) {
-			std::cout << "[" << i << "]\t" << m_priority.top() << '\n';
-			m_priority.pop();
-		}
-	}
-
-	template <typename T, typename Container>
-	void pq_print(std::priority_queue<T, Container>& m_priority) {
-		int n = m_priority.size();
-		std::cout << "Priority Queue size: " << n << std::endl;
-		for (int i = 0;i < n;i++) {
-			std::cout << "[" << i << "]\t" << m_priority.top() << '\n';
-			m_priority.pop();
-		}
-	}
 	
 	template <typename T,typename Container, typename Pr >
 	void pq_print(std::priority_queue<T, Container, Pr>& m_priority) {
+		if (m_priority.empty()) return;
 		int n = m_priority.size();
 		std::cout << "Priority Queue size: " << n << std::endl;
-		for (int i = 0;i < n;i++) {
-			std::cout << "[" << i << "]\t" << m_priority.top() << '\n';
-			m_priority.pop();
-		}
+		// get the first index and iterate it
+		auto it = m_priority.top();
+		for (int i = 0; i < n;i++)
+			std::cout << "[" << i << "]\t" << it++ << '\n';
 	}
 
 	// insert element and sort
-	void pq_push() {
-		int x = 1;
-		p_queue_1.push(x);
-		p_queue_1.push(5);
+	template <typename T, typename Container, typename Pr >
+	void pq_push(std::priority_queue<T, Container, Pr>& m_priority,const T& value) {
+		m_priority.push(value);
 	}
 
 	// constrcut and insert element and sort
-	void pq_emplace() {
-		p_queue_1.emplace(2);
+	template <typename T, typename Container, typename Pr >
+	void pq_emplace(std::priority_queue<T, Container, Pr>& m_priority, const T& value) {
+		m_priority.emplace(value);
 	}
 
-	void pq_empty() {
-		if (p_queue_1.empty()) {
+	template <typename T, typename Container, typename Pr >
+	bool pq_empty(std::priority_queue<T, Container, Pr>& m_priority) {
+		if (m_priority.empty()) {
 			std::cout << "Queue is empty.\n";
+			return true;
 		}
 		else {
 			std::cout << "Queue is not empty.\n";
+			return false;
 		}
 	}
 
 	// remove top element
-	void pq_pop() {
-		p_queue_1.pop();
+
+	template <typename T, typename Container, typename Pr >
+	void pq_pop(std::priority_queue<T, Container, Pr>& m_priority) {
+		m_priority.pop();
 	}
 
-	void pq_top() {
-		std::cout << p_queue_1.top() << std::endl;
+	template <typename T, typename Container, typename Pr >
+	void pq_top(std::priority_queue<T, Container, Pr>& m_priority) {
+		std::cout << "Priority_queue first element: " << m_priority.top() << std::endl;
 	}
 
-	void pq_swap() {
-		p_queue_1.swap(p_queue_2);
+	template <typename T, typename Container, typename Pr >
+	void pq_swap(std::priority_queue<T, Container, Pr>& m_priority1, 
+		std::priority_queue<T, Container, Pr>& m_priority2) 
+	{
+		m_priority1.swap(m_priority2);
 	}
 };
 
 int main() {
-	/*QueueMemberFunction q;
-	q.q_push();
-	q.q_emplace();
-	q.q_front();
-	q.q_back();
-	q.q_pop();
-	q.q_swap();
-	q.q_print(queue_1);*/
+	QueueMemberFunction q;
+	q.q_push(queue_3,20);
+	q.q_emplace(queue_3,10);
+	q.q_front(queue_3);
+	q.q_back(queue_3);
+	 q.q_pop(queue_3);
+	q.q_swap(queue_3,queue_6);
+	q.q_print(queue_3);
+	q.q_print(queue_6);
+	q.q_print(queue_5);
+	q.q_print(queue_4);
 
 	PriorityQueueMemberFunction pr;
-	pr.pq_push();
-	pr.pq_emplace();
-	pr.pq_top();
-	pr.pq_swap();
+	pr.pq_push(p_queue_1,100);
+	pr.pq_emplace(p_queue_1,3412);
+	pr.pq_top(p_queue_1);
+	pr.pq_swap(p_queue_1, p_queue_2);
 	pr.pq_print(p_queue_1);
 	pr.pq_print(p_queue_2);
+	pr.pq_print(p_queue_3);
+	pr.pq_print(p_queue_4);
+	pr.pq_print(p_queue_5);
 
 	return 0;
 }
