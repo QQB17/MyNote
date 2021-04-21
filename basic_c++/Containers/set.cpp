@@ -23,6 +23,19 @@ public:
 
 	// ### CREATE ###
 
+	template <typename T, typename Pr, typename Alloc>
+	void s_get_allocator(std::set<T, Pr, Alloc>& m_set) {
+		int* p;
+		p = m_set.get_allocator().allocate(10);
+		for (int i = 0;i < 10;i++) 
+			p[i] = i * 10;
+
+		for (int i = 0;i < 10;i++) 
+			std::cout << p[i] << ' ';
+		std::cout << std::endl;
+		m_set.get_allocator().deallocate(p, 10);
+	}
+
 
 	// ### READ   ###
 
@@ -33,7 +46,6 @@ public:
 		for (auto& it : m_set) {
 			std::cout << "[" << x++ << "]\t" << it << '\n';
 		}
-		std::cout << std::endl;
 	}
 
 	template <typename T, typename Pr>
@@ -73,11 +85,12 @@ public:
 	void s_find(std::set<T, Pr>& m_set, const T& value) {
 		auto it = m_set.find(value);
 		if (it != m_set.end()) {
-			std::cout << *it;
+			std::cout << "Element is found : " << *it;
 		}
 		else {
-			std::cout << *--it; // set::end - 1, last element
+			std::cout << "Element not found return last element : " << *--it; // set::end - 1, last element
 		}
+		std::cout << std::endl;
 	}
 
 	// check empty and return bool
@@ -104,7 +117,20 @@ public:
 		std::cout << "Equal range match/next element: " << *ret.first << "\tnext: " << *ret.second << std::endl;
 	}
 
-	
+	// returns a copy of the comparison
+	template <typename T, typename Pr>
+	void s_key_comp(std::set<T, Pr>& m_set) {
+		auto comp = m_set.key_comp();
+		for (auto it : m_set) {
+			// comparision by less than
+			if (comp(it, 5)) 
+				std::cout << it << " is less than 5\n";
+
+			// comparision by greater than
+			if (comp(5, it)) 
+				std::cout << it << " is greater than 5\n";
+		}
+	}
 
 	// ### UPDATE ###
 
@@ -118,6 +144,37 @@ public:
 	template <typename T, typename Pr>
 	void s_emplace_hint(std::set<T, Pr>& m_set, const T& value) {
 		m_set.emplace_hint(m_set.begin(), value);
+	}
+
+	// insert element 
+	template <typename T, typename Pr>
+	void s_insert(std::set<T, Pr>& m_set, const T& value) {
+		m_set.insert(value);
+		// m_set.insert(m_set.begin(), 100); // position and value
+		// int arr[] ={ 99,2,3 };
+		// m_set.insert(arr,arr+3); // insert array
+	}
+
+	// return iterator position with pointing element
+	template <typename T, typename Pr>
+	void s_upper_bound(std::set<T, Pr>& m_set) {
+		auto itup = m_set.upper_bound(12); 
+		std::cout << "Start iterate: \n";
+		for (auto it = m_set.begin(); it != itup ;it++) {
+			std::cout << *it << '\n';
+		}
+		std::cout << "Reach upper bound: " << *itup << std::endl;
+	}
+
+	// return iterator position with pointing element
+	template <typename T, typename Pr>
+	void s_lower_bound(std::set<T, Pr>& m_set) {
+		auto itlow = m_set.lower_bound(8);
+		std::cout << "Start iterate with lower bound: " << *itlow << std::endl;
+		for (auto it = itlow; it != m_set.end();it++) {
+			std::cout << *it << '\n';
+		}
+		std::cout << "Container end.\n";
 	}
 
 
@@ -135,7 +192,6 @@ public:
 		m_set.erase(value);
 		//m_set.erase(m_set.begin(),m_set.end());
 	}
-
 };
 
 
@@ -150,10 +206,18 @@ int main() {
 	
 	s.s_erase(set_6,11);
 	s.s_find(set_6, 120);
+	s.s_get_allocator(set_1);
+	s.s_insert(set_1,10);
+	s.s_key_comp(set_6);
+	s.s_upper_bound(set_6);
+	s.s_lower_bound(set_6);
 	s.s_print(set_6);
-
-
-
+	s.s_print(set_2);
+	s.s_print(set_3);
+	s.s_print(set_4);
+	s.s_print(set_5);
+	s.s_print(set_6);
+	s.s_print(set_7);
 	return 0;
 }
 
