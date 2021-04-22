@@ -17,10 +17,18 @@ std::vector<double> vec_1{ 8.9,0.001,99.23,54,-1 };
 
 // Construct map -- C++ 11
 std::map<int, int> map_1; // default
-std::map<int, int> map_2{ {2,10},{3,20} }; // initialize list
+std::map<int, int> map_2{ {2,10},{2,20} }; // initialize list
 std::map<int, int> map_3({ pair_3}); // copy different type of pair 
 std::map<char, int> map_4({ pair_3 }); // copy same type of pair
 std::map<int, std::vector<double>> map_5{ { 1,vec_1} }; // copy vector
+
+// Multiple-key map are associate container to store mutiple mapped value with the same key value
+
+// Construct multimap -- C++ 11
+std::multimap<int, int> multimap_1; // default
+std::multimap<int, int> multimap_2{ {1,10},{2,20},{3,30},{1,-100} }; // initialize list
+std::multimap<int, int> multimap_3({ pair_3 }); // copy pair
+std::multimap<int, int> multimap_4(std::move(multimap_3)); // move multimap
 
 class MapMemberFunction {
 public:
@@ -35,7 +43,7 @@ public:
 		int x = 0, n = m_map.size();
 		std::cout << "Map size: " << n << std::endl;
 		for (auto it : m_map)
-			std::cout << "[" << x++ << "]\t" <<  it.first << ' ' << it.second << '\n';
+			std::cout << "[" << x++ << "]\t" <<  it.first << " => " << it.second << '\n';
 	}
 	
 	// Print vector in map
@@ -45,7 +53,7 @@ public:
 		int x = 0, n = m_map.size();
 		std::cout << "Map size with vector: " << n << std::endl;
 		for (auto it : m_map) {
-			std::cout << "[" << x++ << "]\t" << it.first << ' ';
+			std::cout << "[" << x++ << "]\t" << it.first << " => ";
 			for (auto v : it.second) {
 				std::cout << v << ' ';
 			}
@@ -58,7 +66,7 @@ public:
 	void m_iterator(const std::map<Key, Mapped>& m_map) {
 		std::cout << "Iterator map: \n";
 		for (auto it = m_map.begin(); it != m_map.end(); it++) {
-			std::cout << it->first << ' ' << it->second << '\n';
+			std::cout << it->first << " => " << it->second << '\n';
 		}
 	}
 
@@ -67,7 +75,7 @@ public:
 	void m_reverse_iterator(const std::map<Key, Mapped>& m_map) {
 		std::cout << "Reverse iterator map: \n";
 		for (auto it = m_map.rbegin(); it != m_map.rend(); it++) {
-			std::cout << it->first << ' ' << it->second << '\n';
+			std::cout << it->first << " => " << it->second << '\n';
 		}
 	}
 
@@ -241,6 +249,29 @@ public:
 	}
 };
 
+class MultiMapMemberFunction {
+public:
+
+	// ### CREATE ###
+
+	// ### READ   ###
+
+	template<typename Key, typename Mapped>
+	void mul_print(const std::multimap<Key, Mapped>& m_multimap) {
+		int x = 0, n = m_multimap.size();
+		std::cout << "Multi map size : " << n << std::endl;
+		for (auto it : m_multimap) {
+			std::cout << "[" << x++ << "]\t" << it.first << " => " << it.second << '\n';
+		}
+		std::cout << std::endl;
+
+	}
+
+
+	// ### UPDATE ###
+
+	// ### DELETE ###
+};
 
 int main() {
 
@@ -261,11 +292,15 @@ int main() {
 	m.m_upper_bound(map_2, 1);
 	m.m_operator_square_bracker(map_2, 5);
 	m.m_reverse_iterator(map_2);
+	m.m_print(map_5);
 
-	//m.m_print(map_5);
+	MultiMapMemberFunction mm;
+	mm.mul_print(multimap_2);
+	mm.mul_print(multimap_4);
 
 	return 0;
 }
 
 // References::
 // 1. https://www.cplusplus.com/reference/map/map/
+// 2. https://www.cplusplus.com/reference/map/multimap/
