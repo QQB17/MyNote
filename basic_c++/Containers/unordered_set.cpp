@@ -235,7 +235,7 @@ int main() {
 
 	un.unset_hash_function(unset_3, 10);
 	un.unset_key_eq();
-	//un.unset_max_load_factor(unset_3);
+	un.unset_max_load_factor(unset_3);
 	un.unset_max_bucket_count(unset_3);
 	un.unset_max_size(unset_3);
 	un.unset_rehash(unset_3,1);
