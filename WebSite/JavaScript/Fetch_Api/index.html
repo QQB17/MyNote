@@ -1,0 +1,117 @@
+<!--
+    ** This project is for training purpose only**
+
+    References sources code from
+    1. Traversy Media : https://www.youtube.com/watch?v=Oive66jrwBs
+    2. {JSON} Placeholder : https://jsonplaceholder.typicode.com
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Api</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" 
+    crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h4 class="display-4 m-4">Fecth JSON API</h4>
+        <div class="d-flex">
+            <button class="btn btn-primary m-3" id="btnText">Get Text</button>
+            <button class="btn btn-success m-3" id="btnJson">Get Json</button>
+            <button class="btn btn-warning m-3" id="btnApi">Get API</button>
+        </div>
+        <hr>
+        <div id="output" class="text-body m-3"></div>
+
+        <form id="inputPost">
+            <div class="form-group">
+                <input type="text" id="i_title" class="form-control m-3" placeholder="Title">
+            </div>
+            <div>
+                <textarea id="i_body" class="form-control m-3" placeholder="Body"></textarea>
+            </div>
+            <input type="submit" class="btn btn-success m-3" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("btnText").addEventListener('click', getText);
+        document.getElementById("btnJson").addEventListener('click', getJson);
+        document.getElementById("btnApi").addEventListener('click', getApi);
+        document.getElementById("inputPost").addEventListener('submit',addPost);
+
+        function getText() {
+            fetch('sample.txt') // fecth file
+            .then((res) => res.text()) // return response with text
+            .then((data) => {
+                document.getElementById("output").innerHTML = data // print text
+            })
+            .catch(err => console.log(err)) // return error
+        }
+
+        function getJson() {
+            fetch('user.json')
+            .then((res) => res.json()) // return response with JSON
+            .then((data) =>{
+                let output = '<h4 class="mb-4">User</h4>';
+                // loop the user details 
+                data.forEach(user => {
+                    output +=`
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">ID: ${user.id}</li>
+                        <li class="list-group-item">Name: ${user.name}</li>
+                        <li class="list-group-item">Email: ${user.email}</li>
+                    </ul>
+                    `;
+                })
+                document.getElementById("output").innerHTML = output;
+            })
+        }
+
+        function getApi() {
+            fetch('https://jsonplaceholder.typicode.com/posts')
+            .then((res) => res.json())
+            .then((data) => {
+                let output ='<h4 class="mb-4">Posts</h4>';
+                data.forEach(posts => {
+                    output += `
+                    <ul class="card card-body mb-4">
+                        <h4>Title: ${posts.title}</h4>
+                        <p>Body: ${posts.body}</p>
+                    </ul>
+                    `;
+                })
+                document.getElementById("output").innerHTML = output;
+            })
+        }
+
+        function addPost(e) {
+            // Cancel the event because the resouces will not be add to the server
+            e.preventDefault(); 
+
+            let m_title = document.getElementById("i_title").value; // get title value
+            let m_body = document.getElementById("i_body").value; // get body value
+
+            fetch('https://jsonplaceholder.typicode.com/posts',{
+                method:'POST', 
+                body: JSON.stringify({title: m_title, body: m_body}),
+                headers: {
+                    'Content-type' : 'application/json; charset=UTF-8',
+                },
+            })
+            .then(res => res.json())
+            .then((data) => console.log(data))
+        }
+        
+    </script>
+    
+</body>
+</html>
