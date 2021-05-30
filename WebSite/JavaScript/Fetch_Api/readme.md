@@ -1,10 +1,11 @@
 ### Required
-#####Live-Server
+##### Live-Server
+https://github.com/tapio/live-server
 
 Visual Studio Code
 ```
 1. Open Extension(Ctrl+Shift+X)
-2. Type "Live Server", install it
+2. Type in "Live Server" and click install
 3. Go to you current HTML file
 4. Right click and select "Open with Live Server(Alt+L Alt+O)"
 ```
