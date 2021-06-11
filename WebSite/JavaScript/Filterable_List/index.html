@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filterable List</title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/yeti/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">
+            My Contacts
+        </h1>
+
+        <input type="text" id="filterInput" placeholder="Search names..." class="shadow-none" style="border:none;outline:none;">
+        <hr style="border-top:1px solid black">
+        <div>
+            <ul id="names" class="list-group">
+                <li class="list-group">
+                    <h5 class="display-4">A</h5>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Abe</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Allen</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Aplha</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Abelly</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Anooy</a>
+                </li>
+
+                <li class="list-group">
+                    <h5 class="display-4">B</h5>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Boy</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Beny</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Bravo</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Bonjuh</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Boom</a>
+                </li>
+
+                <li class="list-group">
+                    <h5 class="display-4">C</h5>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Charle</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Chen</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Cow</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Catherine</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#">Chong</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add keyup function to input
+        document.getElementById("filterInput").addEventListener('keyup',filterNames);
+
+        function filterNames(){
+            // get filter value 
+            let filterValues = document.getElementById("filterInput").value.toUpperCase();
+            
+            // get li element
+            let names = document.querySelector("#names");
+            let li = names.querySelectorAll('li.list-group-item');
+            
+            for(let i =0; i < li.length;i++){
+                let a = li[i].getElementsByTagName('a')[0].innerHTML;
+
+                // change style display if match
+                if(a.toUpperCase().indexOf(filterValues) > -1){
+                    li[i].style.display = '';
+                } else{
+                    li[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>
+
+<!-- 
+    References:
+    Traversy Media - Build A Filterable List With Vanilla JavaScript
+    https://www.youtube.com/watch?v=G1eW3Oi6uoc&list=PLillGF-RfqbbnEGy3ROiLWk7JMCuSyQtX&index=7
+-->
