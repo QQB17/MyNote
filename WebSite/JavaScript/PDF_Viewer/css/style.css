@@ -1,0 +1,39 @@
+* {
+    margin:0;
+    padding: 0;
+}
+
+.top-bar {
+    background-color: rgb(121, 44, 136);
+    color:aliceblue;
+    padding: 1rem;
+}
+
+.btn {
+    background-color: rgb(161, 233, 255);
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.page-info {
+    font-size: 1rem;
+}
+
+.error {
+    background-color: orangered;
+    color:#fff;
+    padding: 1rem;
+}
+
+#pdf-render {
+    display:flex;
+    margin:auto;
+}
+    
