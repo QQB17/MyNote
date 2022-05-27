@@ -28,14 +28,17 @@
 // Simple thread pool
 // Reference : https://www.youtube.com/watch?v=eWTGtp3HXiw
 class ThreadPool {
-public:
-	ThreadPool(size_t numThread){
-		start(numThread);
-	}
-	~ThreadPool() {
-		stop();
-	}
+private:
+	std::vector<std::thread> mThreads;
+	std::mutex mThreadMutex;
+	std::condition_variable mCondition;
+	std::queue<std::function<void()>> mTasks;
+	bool mFinished = false;
 
+public:
+
+	ThreadPool(size_t numThread) { start(numThread); }
+	~ThreadPool() { stop(); }
 
 	// enqueue the task by wrapping the packaged_task
 	template<typename T>
@@ -55,36 +58,33 @@ public:
 		return wrapper->get_future();
 
 	}
-
-public:
-	std::vector<std::thread> mThreads; 
-	std::mutex mThreadMutex;
-	std::condition_variable mCondition;
-	std::queue<std::function<void()>> mTasks;
-	bool mFinished = false;
-
+	
 	void start(size_t numThread) 
 	{
 		for (size_t i = 0;i < numThread;i++)
 		{
 			mThreads.emplace_back([=] {
-				while (true)
-				{
-					std::function<void()> task;
-					{
-						std::unique_lock<std::mutex> lock{ mThreadMutex };
-						// wait for task
-						mCondition.wait(lock, [=] {return mFinished || !mTasks.empty();});
-
-						if (mFinished && mTasks.empty())
-							break;
-
-						task = std::move(mTasks.front());
-						mTasks.pop();
-					}
-					task();
-				}
+				add_task();
 			});
+		}
+	}
+
+	void add_task() 
+	{
+		while(true) 
+		{
+			std::function<void()> task;
+			{
+				std::unique_lock<std::mutex> lock{ mThreadMutex };
+				// wait for task
+				mCondition.wait(lock, [=] {return mFinished || !mTasks.empty();});
+
+				if (mTasks.empty() && mFinished) 
+					break;
+				task = std::move(mTasks.front());
+				mTasks.pop();
+			}
+			task();
 		}
 	}
 	

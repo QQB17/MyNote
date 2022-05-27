@@ -110,6 +110,8 @@ int main() {
 	t4.join();
 	t5.join();*/
 
+	std::string str = "hello";
+	std::cout << str[1];
 
 	return 0;
 }
